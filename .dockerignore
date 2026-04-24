@@ -1,0 +1,15 @@
+node_modules
+.react-router
+.velite
+build
+.git
+.gitignore
+.DS_Store
+.env
+.env.local
+.env.*.local
+*.log
+.legacy
+.vscode
+.idea
+README.md

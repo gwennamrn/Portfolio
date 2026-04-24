@@ -1,0 +1,23 @@
+node_modules
+.DS_Store
+
+# Build output
+build
+.react-router
+.velite
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Legacy (Figma Make export)
+.legacy
+
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+
+# IDE
+.vscode/settings.json
+.idea

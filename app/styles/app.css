@@ -1,0 +1,86 @@
+@import "tailwindcss";
+@import "@fontsource-variable/playfair-display";
+@import "@fontsource-variable/inter";
+
+@theme {
+  /* Palette cerise — tokens du site */
+  --color-bg:             #F6F1EE;
+  --color-beige:          #F6F1EE;
+  --color-ink:            #0E0E0E;
+  --color-red:            #6B0F1A;
+  --color-cherry:         #8E1B2C;
+  --color-bordeaux:       #800020;
+  --color-bordeaux-light: #A8304A;
+
+  /* Catégories de projets */
+  --color-cat-formation:  #2E5C8A;
+  --color-cat-entreprise: #4A7C59;
+  --color-cat-perso:      #8B5A8E;
+
+  /* Fontes */
+  --font-serif: "Playfair Display Variable", "Playfair Display", Georgia, serif;
+  --font-sans:  "Inter Variable", "Inter", system-ui, sans-serif;
+
+  /* Easing signature */
+  --ease-out-expo:   cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+@layer base {
+  html, body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: var(--color-cherry);
+    color: var(--color-bg);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  /* Lenis */
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
+  }
+
+  /* Respect reduced-motion pour les cerises tombantes + 3D + Lenis */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty  { text-wrap: pretty; }
+
+  .font-serif { font-family: var(--font-serif); }
+  .font-sans  { font-family: var(--font-sans); }
+}

@@ -1,32 +1,31 @@
-import { defineConfig } from 'vite'
-import path from 'path'
-import tailwindcss from '@tailwindcss/vite'
-import react from '@vitejs/plugin-react'
-
-
-function figmaAssetResolver() {
-  return {
-    name: 'figma-asset-resolver',
-    resolveId(id) {
-      if (id.startsWith('figma:asset/')) {
-        const filename = id.replace('figma:asset/', '')
-        return path.resolve(__dirname, 'src/assets', filename)
-      }
-    },
-  }
-}
+import { reactRouter } from "@react-router/dev/vite";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   plugins: [
-    figmaAssetResolver(),
-    // The React and Tailwind plugins are both required for Make, even if
-    // Tailwind is not being actively used – do not remove them
-    react(),
+    {
+      name: "velite-build",
+      async buildStart() {
+        const { build } = await import("velite");
+        await build({ watch: this.meta.watchMode, clean: false });
+      },
+    },
     tailwindcss(),
+    reactRouter(),
+    tsconfigPaths(),
   ],
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
+    dedupe: ["react", "react-dom", "react-router", "motion", "motion/react"],
   },
-})
+  optimizeDeps: {
+    include: ["react", "react-dom", "react-router", "motion/react"],
+  },
+  ssr: {
+    noExternal: ["motion"],
+  },
+  server: {
+    port: 5173,
+  },
+});
