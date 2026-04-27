@@ -6,6 +6,7 @@ import type { Route } from "./+types/projects";
 import { projects } from "#content/index.js";
 import { COLORS, FILTER_OPTIONS, type FilterId } from "~/lib/colors";
 import { ProjectCard } from "~/components/project/ProjectCard";
+import { Picture } from "~/components/ui/Picture";
 
 export function meta() {
   return [
@@ -136,13 +137,14 @@ export default function ProjectsList({ loaderData }: Route.ComponentProps) {
                 aria-label={`Voir le projet ${p.title}`}
                 className="relative h-[200px] w-[300px] shrink-0 overflow-hidden rounded-[20px] no-underline"
               >
-                <img
+                <Picture
                   src={p.image.src}
                   width={p.image.width}
                   height={p.image.height}
                   alt={p.title}
                   loading="lazy"
                   className="h-full w-full object-cover"
+                  pictureClassName="block h-full w-full"
                 />
                 <div
                   className="absolute inset-x-0 bottom-0 p-5"

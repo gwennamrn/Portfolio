@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { useState } from "react";
 import { ChevronRight, X, ZoomIn, ChevronLeft } from "lucide-react";
+import { Picture } from "~/components/ui/Picture";
 import { COLORS } from "~/lib/colors";
 
 interface FolderCardProps {
@@ -117,13 +118,14 @@ export function FolderImagesGrid({ items }: { items: FolderItem[] }) {
                 </div>
               )}
               <div className="h-[300px] overflow-hidden">
-                <img
+                <Picture
                   src={item.image.src}
                   width={item.image.width}
                   height={item.image.height}
                   alt={item.description}
                   loading="lazy"
                   className="block h-full w-full object-cover object-[center_top]"
+                  pictureClassName="block h-full w-full"
                 />
               </div>
               <div
@@ -221,7 +223,7 @@ export function FolderMoodboardGrid({ items }: { items: FolderItem[] }) {
             style={{ backgroundColor: COLORS.bg }}
           >
             <div className="leading-[0]" style={{ backgroundColor: COLORS.bg }}>
-              <img
+              <Picture
                 src={item.image.src}
                 width={item.image.width}
                 height={item.image.height}
@@ -320,11 +322,12 @@ export function FolderPreuvesGrid({ items }: { items: FolderItem[] }) {
                       className="flex h-[420px] items-start justify-center p-5"
                       style={{ backgroundColor: "#f9f7f5" }}
                     >
-                      <img
+                      <Picture
                         src={doc.src}
                         alt={`${provider} — ${doc.label}`}
                         loading="lazy"
                         className="block h-full w-full object-contain object-[center_top]"
+                        pictureClassName="block h-full w-full"
                       />
                     </div>
                     <div
@@ -492,7 +495,7 @@ function LightboxCarousel({
         onClick={(e) => e.stopPropagation()}
         className="flex w-full max-w-[900px] flex-col items-center"
       >
-        <img
+        <Picture
           src={items[index].src}
           alt={items[index].desc}
           className="cursor-default rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)]"

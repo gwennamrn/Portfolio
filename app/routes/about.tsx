@@ -7,6 +7,7 @@ import {
   AboutPassions,
   AboutSkills,
 } from "~/components/about/AboutSections";
+import { Picture } from "~/components/ui/Picture";
 import { COLORS } from "~/lib/colors";
 
 export function meta() {
@@ -55,10 +56,13 @@ export default function About() {
           className="relative"
         >
           <div className="relative h-[300px] w-[400px] overflow-hidden rounded-[20px]">
-            <img
+            <Picture
               src="/about-photo.png"
+              width={400}
+              height={300}
               alt="Photo de Gwennaëlle"
               className="h-full w-full object-cover"
+              pictureClassName="block h-full w-full"
             />
             <div
               aria-hidden="true"

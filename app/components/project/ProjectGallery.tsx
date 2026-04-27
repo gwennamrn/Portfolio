@@ -2,6 +2,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback } from "react";
+import { Picture } from "~/components/ui/Picture";
 import { COLORS } from "~/lib/colors";
 
 export interface GalleryImage {
@@ -30,7 +31,7 @@ export function ProjectGallery({
         <div className="flex">
           {images.map((img, i) => (
             <div key={i} className="relative min-w-0 flex-[0_0_100%]">
-              <img
+              <Picture
                 src={img.src}
                 width={img.width}
                 height={img.height}

@@ -14,6 +14,7 @@ import {
   FolderMoodboardGrid,
   FolderPreuvesGrid,
 } from "~/components/project/FolderCard";
+import { Picture } from "~/components/ui/Picture";
 
 type FolderKey =
   | "reseauxSociaux"
@@ -535,13 +536,14 @@ export default function ProjectDetail({ loaderData }: Route.ComponentProps) {
                 transition={{ duration: 0.5 }}
                 className="h-[350px] cursor-pointer overflow-hidden rounded-[20px] bg-white"
               >
-                <img
+                <Picture
                   src={img.src}
                   width={img.width}
                   height={img.height}
                   alt={`${p.title} - Image ${i + 1}`}
                   loading="lazy"
                   className="block h-full w-full object-contain"
+                  pictureClassName="block h-full w-full"
                 />
               </motion.div>
             ))}

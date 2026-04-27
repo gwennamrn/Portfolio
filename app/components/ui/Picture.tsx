@@ -16,8 +16,8 @@ export function deriveVariants(src: string): { avif: string; webp: string } {
 interface PictureProps
   extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src" | "width" | "height"> {
   src: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   alt: string;
   pictureClassName?: string;
   pictureStyle?: CSSProperties;
