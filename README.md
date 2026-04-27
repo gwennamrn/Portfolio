@@ -1,7 +1,7 @@
 # Portfolio — Gwennaëlle
 
 Portfolio professionnel en ligne pour le BTS Communication.
-Stack moderne (React Router 7 framework, React 19, TS, Tailwind 4, Motion + GSAP + Lenis, React Three Fiber, Velite MDX + Zod, Resend), prête à déployer via Docker sur Dokploy.
+Stack moderne (React Router 7 framework, React 19, TS, Tailwind 4, Motion + GSAP + Lenis, Velite MDX + Zod, Resend), prête à déployer via Docker sur Dokploy.
 
 ---
 
@@ -95,7 +95,6 @@ Pour la production : `pnpm build` régénère tout.
 - **Vite**
 - **Tailwind v4** + fontes self-hosted (Playfair Display + Inter)
 - **Motion** (Framer Motion) + **GSAP** (ScrollTrigger, SplitText) + **Lenis** (smooth scroll)
-- **React Three Fiber** + **Drei** pour la cerise 3D du hero
 - **Embla Carousel** pour les galeries
 - **Lucide** pour les icônes
 - **Velite** (MDX + Zod) pour le contenu des projets, avec pipeline **Sharp** pour AVIF/WebP responsive
@@ -147,7 +146,3 @@ Chaque push sur `main` = redéploiement automatique.
 2. **Dev** : utiliser `onboarding@resend.dev` comme expéditeur — les mails n'arrivent qu'à l'adresse du compte Resend, c'est suffisant pour tester.
 3. **Prod** : vérifier un domaine dans Resend (ajouter les records DNS fournis), puis mettre `CONTACT_FROM_EMAIL="Portfolio <noreply@ton-domaine.fr>"`.
 4. Copier la clé API dans les variables d'env Dokploy.
-
-## Dossier `.legacy/`
-
-Contient l'export Figma Make original (Vite + React 18 + inline styles). Non inclus dans le build Docker via `.dockerignore`. À supprimer une fois la migration validée.
