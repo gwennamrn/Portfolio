@@ -1,12 +1,27 @@
+import { useEffect } from "react";
 import { motion } from "motion/react";
 import { Link } from "react-router";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Info, Target, Users, Users2 } from "lucide-react";
 import type { Route } from "./+types/project-detail";
 import { projects } from "#content/index.js";
-import { COLORS, CATEGORY_CONFIG } from "~/lib/colors";
+import { COLORS } from "~/lib/colors";
 import { getIcon } from "~/lib/icons";
-import { ProjectGallery } from "~/components/project/ProjectGallery";
-import { FolderImagesGrid, FolderVideosGrid } from "~/components/project/FolderCard";
+import { useState } from "react";
+import {
+  FolderCard,
+  FolderImagesGrid,
+  FolderVideosGrid,
+  FolderMoodboardGrid,
+  FolderPreuvesGrid,
+} from "~/components/project/FolderCard";
+
+type FolderKey =
+  | "reseauxSociaux"
+  | "videos"
+  | "print"
+  | "plus"
+  | "preuves"
+  | "moodboard";
 
 export function meta({ data }: Route.MetaArgs) {
   if (!data?.project) {
@@ -33,249 +48,518 @@ export function loader({ params }: Route.LoaderArgs) {
 
 export default function ProjectDetail({ loaderData }: Route.ComponentProps) {
   const p = loaderData.project;
-  const cat = CATEGORY_CONFIG[p.category];
   const folders = p.galleryFolders;
+  const isSoleia = p.slug === "soleia";
+  const isLGM = p.slug === "lgm";
+
+  const [selectedFolder, setSelectedFolder] = useState<FolderKey | null>(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const toggleFolder = (key: FolderKey) =>
+    setSelectedFolder((prev) => (prev === key ? null : key));
 
   return (
-    <article className="pb-24 pt-16">
-      <div className="mx-auto max-w-[1280px] px-6">
-        <Link
-          to="/projects"
-          viewTransition
-          className="mb-10 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.1em] text-[var(--color-cherry)] no-underline"
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="relative overflow-hidden pb-[100px]"
+    >
+      {/* Header */}
+      <header className="relative z-[1] mx-auto max-w-[1200px] px-5 pb-[60px] pt-[120px] text-center">
+        <motion.h1
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="mb-[15px] font-serif font-normal leading-[1.1]"
+          style={{
+            fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+            color: COLORS.text,
+            viewTransitionName: `project-title-${p.slug}`,
+          } as React.CSSProperties}
         >
-          <ArrowLeft size={16} /> Retour aux projets
-        </Link>
-      </div>
-
-      <header className="mx-auto mb-16 max-w-[1280px] px-6">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
-          <div>
-            <span
-              className="mb-4 inline-block rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.1em]"
-              style={{ backgroundColor: cat.color + "22", color: cat.color }}
-            >
-              {cat.label} · {p.year}
-            </span>
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="mb-4 font-serif font-normal leading-[0.95] tracking-[-0.02em] text-[var(--color-ink)]"
-              style={{
-                fontSize: "clamp(2.5rem, 7vw, 5rem)",
-                viewTransitionName: `project-title-${p.slug}`,
-              } as React.CSSProperties}
-            >
-              {p.title}
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-xl font-light italic opacity-80"
-            >
-              {p.subtitle}
-            </motion.p>
-          </div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="overflow-hidden rounded-[30px] shadow-[0_20px_60px_rgba(0,0,0,0.15)]"
-            style={{ viewTransitionName: `project-image-${p.slug}` } as React.CSSProperties}
-          >
-            <img
-              src={p.image.src}
-              width={p.image.width}
-              height={p.image.height}
-              alt={`Cover du projet ${p.title}`}
-              className="h-full w-full object-cover"
-            />
-          </motion.div>
-        </div>
+          {p.title}
+        </motion.h1>
+        <motion.h2
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.6 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="mb-10 font-normal"
+          style={{
+            fontSize: "clamp(1.2rem, 3vw, 1.8rem)",
+            color: COLORS.text,
+          }}
+        >
+          {p.subtitle}
+        </motion.h2>
       </header>
 
-      <section className="mx-auto mb-20 max-w-[900px] px-6">
-        <SectionTitle>Brief</SectionTitle>
-        <BriefBlock label="Contexte" value={p.brief.context} />
-        {p.brief.hook && <BriefBlock label="Accroche" value={p.brief.hook} tone="cherry" />}
-        <BriefBlock label="Mission" value={p.brief.mission} />
-        {p.brief.constraints && <BriefBlock label="Contraintes" value={p.brief.constraints} />}
-        {p.brief.problematic && <BriefBlock label="Problématique" value={p.brief.problematic} />}
-        {p.brief.slogan && <BriefBlock label="Slogan" value={p.brief.slogan} tone="cherry" />}
-        {p.brief.supports && <BriefBlock label="Supports" value={p.brief.supports} />}
-        <BriefBlock label="Résultat attendu" value={p.brief.result} />
+      {/* Brief */}
+      <section
+        aria-labelledby="brief-heading"
+        className="mx-auto mb-[100px] max-w-[1000px] px-5"
+      >
+        <div
+          className="relative rounded-[30px] px-10 py-[60px] shadow-[0_10px_30px_rgba(107,15,26,0.2)]"
+          style={{ backgroundColor: COLORS.red }}
+        >
+          <div
+            className="absolute -top-6 left-10 rounded-full p-[15px] shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
+            style={{ backgroundColor: COLORS.white, color: COLORS.red }}
+            aria-hidden="true"
+          >
+            <Info size={24} />
+          </div>
+          <h3
+            id="brief-heading"
+            className="mb-[30px] text-[28px]"
+            style={{ color: COLORS.white }}
+          >
+            Brief & Contexte
+          </h3>
+          <div
+            className="text-base leading-[1.7]"
+            style={{ color: COLORS.white }}
+          >
+            <p className="mb-[15px]">
+              <strong>Contexte :</strong> {p.brief.context}
+            </p>
+            {p.brief.hook && (
+              <p
+                className="mb-[15px] pl-[15px] text-lg italic"
+                style={{ borderLeft: `3px solid ${COLORS.white}` }}
+              >
+                {p.brief.hook}
+              </p>
+            )}
+            <p className="mb-[15px]">
+              <strong>Mission / Création :</strong> {p.brief.mission}
+            </p>
+            {p.brief.slogan && (
+              <p className="mb-[15px]">
+                <strong>Slogan principal :</strong> {p.brief.slogan}
+              </p>
+            )}
+            {p.brief.supports && (
+              <p className="mb-[15px]">
+                <strong>Supports réalisés :</strong> {p.brief.supports}
+              </p>
+            )}
+            <p className="my-5">
+              <strong>Impact attendu :</strong> {p.brief.result}
+            </p>
+            {p.brief.constraints && !p.brief.hook && (
+              <>
+                <p className="mb-[15px]">
+                  <strong>Contraintes :</strong> {p.brief.constraints}
+                </p>
+                {p.brief.problematic && (
+                  <p className="mb-[15px]">
+                    <strong>Problématique :</strong> {p.brief.problematic}
+                  </p>
+                )}
+              </>
+            )}
+          </div>
+        </div>
       </section>
 
+      {/* Copy stratégie */}
       {p.copyStrategy && (
-        <section className="mx-auto mb-20 max-w-[900px] px-6">
-          <SectionTitle>Copy strategy</SectionTitle>
-          <div className="grid gap-5 sm:grid-cols-2">
-            <BriefBlock label="Promesse" value={p.copyStrategy.promesse} />
-            <BriefBlock label="Message clé" value={p.copyStrategy.messageCle} />
-            <BriefBlock label="Ton" value={p.copyStrategy.ton} />
-            <BriefBlock label="Concept" value={p.copyStrategy.concept} />
+        <section className="mx-auto mb-[100px] max-w-[800px] px-5">
+          <div className="flex flex-col gap-10">
+            {(
+              [
+                { label: "Promesse", value: p.copyStrategy.promesse, delay: 0 },
+                { label: "Message clé", value: p.copyStrategy.messageCle, delay: 0.15 },
+                { label: "Ton", value: p.copyStrategy.ton, delay: 0.3 },
+                { label: "Concept", value: p.copyStrategy.concept, delay: 0.45 },
+              ] as const
+            ).map((block) => (
+              <motion.div
+                key={block.label}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: block.delay, duration: 0.8 }}
+              >
+                <h4
+                  className="mb-[15px] text-xl font-bold"
+                  style={{ color: COLORS.red }}
+                >
+                  {block.label}
+                </h4>
+                <motion.div
+                  whileHover={{ y: -3, boxShadow: "0 8px 30px rgba(107,15,26,0.15)" }}
+                  className="rounded-[20px] px-[25px] py-[30px] shadow-[0_4px_20px_rgba(107,15,26,0.1)]"
+                  style={{ backgroundColor: COLORS.red }}
+                >
+                  <p
+                    className="m-0 leading-[1.6]"
+                    style={{ color: COLORS.white }}
+                  >
+                    {block.value}
+                  </p>
+                </motion.div>
+              </motion.div>
+            ))}
           </div>
         </section>
       )}
 
-      <section className="mx-auto mb-20 max-w-[1100px] px-6">
-        <SectionTitle>Objectifs</SectionTitle>
-        <div className="grid gap-6 md:grid-cols-3">
-          {p.objectives.map((o) => {
-            const Icon = getIcon(o.icon);
+      {/* Objectifs */}
+      <section
+        aria-labelledby="objectives-heading"
+        className="mx-auto mb-[100px] max-w-[1200px] px-5"
+      >
+        <div className="mb-[50px] text-center">
+          <h3
+            id="objectives-heading"
+            className="mb-[15px] text-[32px]"
+            style={{ color: COLORS.text }}
+          >
+            Objectifs de communication
+          </h3>
+          <div
+            aria-hidden="true"
+            className="mx-auto h-[3px] w-[60px]"
+            style={{ backgroundColor: COLORS.red }}
+          />
+        </div>
+        <div
+          className="grid gap-[30px]"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}
+        >
+          {p.objectives.map((obj, index) => {
+            const Icon = getIcon(obj.icon);
             return (
               <motion.div
-                key={o.type}
-                initial={{ opacity: 0, y: 20 }}
+                key={obj.type}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="rounded-2xl bg-white p-6 shadow-md"
+                transition={{ delay: index * 0.3, duration: 0.8 }}
+                whileHover={{ y: -3, boxShadow: "0 8px 30px rgba(107,15,26,0.15)" }}
+                className="rounded-3xl px-[30px] py-10 shadow-[0_4px_20px_rgba(107,15,26,0.1)]"
+                style={{ backgroundColor: COLORS.red }}
               >
                 <div
-                  className="mb-4 flex h-12 w-12 items-center justify-center rounded-full"
-                  style={{ backgroundColor: COLORS.cherry + "18", color: COLORS.cherry }}
+                  className="mb-5 flex h-[50px] w-[50px] items-center justify-center rounded-full"
+                  style={{ backgroundColor: COLORS.white, color: COLORS.red }}
                 >
-                  <Icon size={22} strokeWidth={1.8} />
+                  <Icon size={24} />
                 </div>
-                <h3 className="mb-2 font-serif text-xl" style={{ color: COLORS.cherry }}>
-                  {o.type}
-                </h3>
-                <p className="text-sm leading-relaxed opacity-80">{o.desc}</p>
+                <h4
+                  className="mb-[10px] text-xl"
+                  style={{ color: COLORS.white }}
+                >
+                  Objectif {obj.type}
+                </h4>
+                <p className="leading-[1.6]" style={{ color: COLORS.white }}>
+                  {obj.desc}
+                </p>
               </motion.div>
             );
           })}
         </div>
       </section>
 
-      <section className="mx-auto mb-20 max-w-[1100px] px-6">
-        <SectionTitle>Cibles</SectionTitle>
-        <div className="grid gap-5 md:grid-cols-2">
-          {p.targets.map((t, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              className="rounded-2xl p-6"
-              style={{ backgroundColor: COLORS.beige, border: `2px solid ${COLORS.cherry}22` }}
-            >
-              <h3
-                className="mb-2 text-xs font-bold uppercase tracking-[0.1em]"
-                style={{ color: COLORS.cherry }}
-              >
-                {t.type}
-              </h3>
-              <p className="text-sm leading-relaxed">{t.desc}</p>
-              {t.channels && (
-                <p className="mt-3 text-xs italic opacity-70">Canaux : {t.channels}</p>
-              )}
-            </motion.div>
-          ))}
+      {/* Cibles */}
+      <section
+        aria-labelledby="targets-heading"
+        className="mx-auto mb-[100px] max-w-[1200px] px-5"
+      >
+        <div className="mb-[50px] text-center">
+          <h3
+            id="targets-heading"
+            className="mb-[15px] text-[32px]"
+            style={{ color: COLORS.text }}
+          >
+            Coeur de cible
+          </h3>
+          <div
+            aria-hidden="true"
+            className="mx-auto h-[3px] w-[60px]"
+            style={{ backgroundColor: COLORS.red }}
+          />
         </div>
+
+        {isSoleia ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-wrap items-center justify-center gap-20 px-5 py-[60px]"
+          >
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="relative flex-shrink-0"
+              style={{
+                width: 420,
+                height: 420,
+                maxWidth: "90vw",
+                maxHeight: "90vw",
+              }}
+            >
+              <svg viewBox="0 0 420 420" className="h-full w-full">
+                <circle cx="210" cy="210" r="200" fill="none" stroke={COLORS.red} strokeWidth="6" opacity="0.25" />
+                <circle cx="210" cy="210" r="130" fill="none" stroke={COLORS.red} strokeWidth="9" />
+                <line x1="210" y1="10" x2="210" y2="70" stroke={COLORS.red} strokeWidth="7" opacity="0.65" />
+                <line x1="210" y1="350" x2="210" y2="410" stroke={COLORS.red} strokeWidth="7" opacity="0.65" />
+                <line x1="10" y1="210" x2="70" y2="210" stroke={COLORS.red} strokeWidth="7" opacity="0.65" />
+                <line x1="350" y1="210" x2="410" y2="210" stroke={COLORS.red} strokeWidth="7" opacity="0.65" />
+              </svg>
+              <div
+                className="pointer-events-none absolute left-1/2 top-1/2 w-[230px] -translate-x-1/2 -translate-y-1/2 text-center"
+              >
+                <p
+                  className="m-0 font-bold leading-none tracking-[2px]"
+                  style={{
+                    fontSize: "clamp(36px, 6vw, 52px)",
+                    color: COLORS.red,
+                  }}
+                >
+                  18-35 ans
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="relative mt-10 flex-shrink-0"
+              style={{
+                width: 300,
+                height: 300,
+                maxWidth: "75vw",
+                maxHeight: "75vw",
+              }}
+            >
+              <svg viewBox="0 0 300 300" className="h-full w-full">
+                <circle cx="150" cy="150" r="140" fill="none" stroke={COLORS.red} strokeWidth="5" opacity="0.25" />
+                <circle cx="150" cy="150" r="90" fill="none" stroke={COLORS.red} strokeWidth="7" />
+                <line x1="150" y1="10" x2="150" y2="55" stroke={COLORS.red} strokeWidth="5" opacity="0.65" />
+                <line x1="150" y1="245" x2="150" y2="290" stroke={COLORS.red} strokeWidth="5" opacity="0.65" />
+                <line x1="10" y1="150" x2="55" y2="150" stroke={COLORS.red} strokeWidth="5" opacity="0.65" />
+                <line x1="245" y1="150" x2="290" y2="150" stroke={COLORS.red} strokeWidth="5" opacity="0.65" />
+              </svg>
+              <div
+                className="pointer-events-none absolute left-1/2 top-1/2 w-[160px] -translate-x-1/2 -translate-y-1/2 px-[10px] text-center"
+              >
+                <p
+                  className="m-0 font-semibold leading-[1.4]"
+                  style={{
+                    fontSize: "clamp(12px, 2.2vw, 14px)",
+                    color: COLORS.red,
+                  }}
+                >
+                  Jeunes adultes intéressés par le développement personnel, la créativité et les expériences bien-être
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        ) : (
+          <div
+            className="grid gap-10"
+            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}
+          >
+            {p.targets.map((target, index) => {
+              const TargetIcon = index === 0 ? Target : index === 1 ? Users : Users2;
+              return (
+                <motion.div
+                  key={target.type}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.3, duration: 0.8 }}
+                  className="rounded-3xl p-10 text-center shadow-[0_4px_15px_rgba(107,15,26,0.1)]"
+                  style={{ backgroundColor: COLORS.red }}
+                >
+                  <div
+                    className="mb-5 flex justify-center"
+                    style={{ color: COLORS.white }}
+                  >
+                    <TargetIcon size={40} />
+                  </div>
+                  <h4
+                    className="mb-[10px] text-[22px]"
+                    style={{ color: COLORS.white }}
+                  >
+                    {target.type}
+                  </h4>
+                  <p
+                    className="mb-[15px] leading-[1.6]"
+                    style={{ color: COLORS.white }}
+                  >
+                    {target.desc}
+                  </p>
+                  {target.channels && (
+                    <p
+                      className="mt-[15px] pt-[15px] text-sm leading-[1.6]"
+                      style={{
+                        color: COLORS.white,
+                        borderTop: "1px solid rgba(255,255,255,0.3)",
+                      }}
+                    >
+                      <strong>Canaux :</strong> {target.channels}
+                    </p>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
-      {p.gallery.length > 0 && (
-        <section className="mx-auto mb-20 px-6">
-          <div className="mx-auto max-w-[1100px]">
-            <SectionTitle>Galerie</SectionTitle>
-          </div>
-          <ProjectGallery images={p.gallery} alt={p.title} />
-        </section>
-      )}
-
-      {folders && (
-        <section className="mx-auto mb-24 max-w-[1100px] px-6">
-          <SectionTitle>Supports</SectionTitle>
-          <div className="space-y-12">
-            {folders.reseauxSociaux.length > 0 && (
-              <FolderSection title="Réseaux sociaux">
-                <FolderImagesGrid items={folders.reseauxSociaux} />
-              </FolderSection>
-            )}
-            {folders.videos.length > 0 && (
-              <FolderSection title="Vidéos">
-                <FolderVideosGrid items={folders.videos} />
-              </FolderSection>
-            )}
-            {folders.print.length > 0 && (
-              <FolderSection title="Print">
-                <FolderImagesGrid items={folders.print} />
-              </FolderSection>
-            )}
-            {folders.plus.length > 0 && (
-              <FolderSection title="Plus">
-                <FolderImagesGrid items={folders.plus} />
-              </FolderSection>
-            )}
-            {folders.preuves && folders.preuves.length > 0 && (
-              <FolderSection title="Preuves">
-                <FolderImagesGrid items={folders.preuves} />
-              </FolderSection>
-            )}
-            {folders.moodboard && folders.moodboard.length > 0 && (
-              <FolderSection title="Moodboard">
-                <FolderImagesGrid items={folders.moodboard} />
-              </FolderSection>
-            )}
-          </div>
-        </section>
-      )}
-    </article>
-  );
-}
-
-function SectionTitle({ children }: { children: React.ReactNode }) {
-  return (
-    <h2
-      className="mb-10 font-serif font-semibold"
-      style={{ color: COLORS.cherry, fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)" }}
-    >
-      {children}
-    </h2>
-  );
-}
-
-function BriefBlock({
-  label,
-  value,
-  tone,
-}: {
-  label: string;
-  value: string;
-  tone?: "cherry";
-}) {
-  return (
-    <div
-      className="mb-5 rounded-2xl p-6"
-      style={{
-        backgroundColor: tone === "cherry" ? COLORS.cherry + "10" : COLORS.white,
-        borderLeft: `4px solid ${tone === "cherry" ? COLORS.cherry : COLORS.red}`,
-      }}
-    >
-      <h3
-        className="mb-2 text-xs font-bold uppercase tracking-[0.1em]"
-        style={{ color: tone === "cherry" ? COLORS.cherry : COLORS.red }}
+      {/* Galerie */}
+      <section
+        aria-labelledby="gallery-heading"
+        className="mx-auto mb-[100px] max-w-[1200px] px-5"
       >
-        {label}
-      </h3>
-      <p className="text-base leading-relaxed">{value}</p>
-    </div>
-  );
-}
+        <div className="mb-[50px] text-center">
+          <h3
+            id="gallery-heading"
+            className="mb-[15px] text-[32px]"
+            style={{ color: COLORS.text }}
+          >
+            Galerie du projet
+          </h3>
+          <div
+            aria-hidden="true"
+            className="mx-auto mb-5 h-[3px] w-[60px]"
+            style={{ backgroundColor: COLORS.red }}
+          />
+        </div>
 
-function FolderSection({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <h3
-        className="mb-6 font-serif text-2xl font-semibold"
-        style={{ color: COLORS.cherry }}
-      >
-        {title}
-      </h3>
-      {children}
-    </div>
+        {isLGM && (
+          <div className="mb-[30px] text-center">
+            <a
+              href="https://www.figma.com/design/bQeMrKmKKL5Q19P3C5YkUz/Untitled?node-id=0-1&p=f&t=6zQtN0chzWFBubBZ-0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block rounded-[25px] px-[30px] py-[15px] text-sm font-semibold tracking-[0.5px] no-underline shadow-[0_4px_15px_rgba(107,15,26,0.3)]"
+              style={{ backgroundColor: COLORS.red, color: COLORS.white }}
+            >
+              APPLICATION MOBILE PROTOTYPE
+            </a>
+          </div>
+        )}
+
+        {folders ? (
+          <>
+            <div
+              className="mb-[50px] grid justify-center gap-[25px]"
+              style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 220px))" }}
+            >
+              {folders.reseauxSociaux.length > 0 && (
+                <FolderCard
+                  title="Réseaux Sociaux"
+                  isSelected={selectedFolder === "reseauxSociaux"}
+                  onClick={() => toggleFolder("reseauxSociaux")}
+                />
+              )}
+              {folders.videos.length > 0 && (
+                <FolderCard
+                  title="Vidéos"
+                  isSelected={selectedFolder === "videos"}
+                  onClick={() => toggleFolder("videos")}
+                />
+              )}
+              {folders.print.length > 0 && (
+                <FolderCard
+                  title="Print"
+                  isSelected={selectedFolder === "print"}
+                  onClick={() => toggleFolder("print")}
+                />
+              )}
+              {folders.plus.length > 0 && (
+                <FolderCard
+                  title="Plus"
+                  isSelected={selectedFolder === "plus"}
+                  onClick={() => toggleFolder("plus")}
+                />
+              )}
+              {folders.preuves && folders.preuves.length > 0 && (
+                <FolderCard
+                  title="Preuves"
+                  isSelected={selectedFolder === "preuves"}
+                  onClick={() => toggleFolder("preuves")}
+                />
+              )}
+              {folders.moodboard && folders.moodboard.length > 0 && (
+                <FolderCard
+                  title="Moodboard"
+                  isSelected={selectedFolder === "moodboard"}
+                  onClick={() => toggleFolder("moodboard")}
+                />
+              )}
+            </div>
+
+            {selectedFolder === "reseauxSociaux" && (
+              <FolderImagesGrid items={folders.reseauxSociaux} />
+            )}
+            {selectedFolder === "videos" && (
+              <FolderVideosGrid items={folders.videos} />
+            )}
+            {selectedFolder === "print" && (
+              <FolderImagesGrid items={folders.print} />
+            )}
+            {selectedFolder === "plus" && (
+              <FolderImagesGrid items={folders.plus} />
+            )}
+            {selectedFolder === "preuves" && folders.preuves && (
+              <FolderPreuvesGrid items={folders.preuves} />
+            )}
+            {selectedFolder === "moodboard" && folders.moodboard && (
+              <FolderMoodboardGrid items={folders.moodboard} />
+            )}
+          </>
+        ) : (
+          <div
+            className="grid gap-[30px]"
+            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))" }}
+          >
+            {p.gallery.map((img, i) => (
+              <motion.div
+                key={i}
+                whileHover={{ boxShadow: `0 0 0 3px ${COLORS.red}` }}
+                transition={{ duration: 0.5 }}
+                className="h-[350px] cursor-pointer overflow-hidden rounded-[20px] bg-white"
+              >
+                <img
+                  src={img.src}
+                  width={img.width}
+                  height={img.height}
+                  alt={`${p.title} - Image ${i + 1}`}
+                  loading="lazy"
+                  className="block h-full w-full object-contain"
+                />
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Bouton retour */}
+      <div className="px-5 text-center">
+        <Link
+          to="/projects"
+          viewTransition
+          className="inline-flex items-center gap-[10px] rounded-[40px] px-10 py-[18px] text-lg font-semibold no-underline shadow-[0_10px_30px_rgba(107,15,26,0.3)]"
+          style={{ backgroundColor: COLORS.red, color: COLORS.white }}
+        >
+          <ArrowLeft size={20} /> Retour aux réalisations
+        </Link>
+      </div>
+    </motion.div>
   );
 }
