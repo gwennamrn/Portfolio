@@ -6,6 +6,12 @@ build
 .react-router
 .velite
 
+# Variantes d'images générées automatiquement par scripts/optimize-images.mjs
+public/content/*.webp
+public/content/*.avif
+public/about-photo.webp
+public/about-photo.avif
+
 # Env
 .env
 .env.local

@@ -11,6 +11,13 @@ export default defineConfig({
         await build({ watch: this.meta.watchMode, clean: false });
       },
     },
+    {
+      name: "optimize-images",
+      async buildStart() {
+        const { run } = await import("./scripts/optimize-images.mjs");
+        await run();
+      },
+    },
     tailwindcss(),
     reactRouter(),
   ],
