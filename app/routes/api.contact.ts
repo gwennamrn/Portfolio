@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { Route } from "./+types/api.contact";
 import { ContactSchema } from "~/lib/contact-schema";
 import { getResend, CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL } from "~/lib/resend";
@@ -17,7 +18,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   const parsed = ContactSchema.safeParse(raw);
   if (!parsed.success) {
-    const fieldErrors = parsed.error.flatten().fieldErrors;
+    const fieldErrors = z.flattenError(parsed.error).fieldErrors;
     return Response.json({ ok: false, fieldErrors }, { status: 400 });
   }
 
