@@ -2,7 +2,7 @@
 FROM node:22-alpine AS deps
 WORKDIR /app
 RUN apk add --no-cache libc6-compat
-RUN corepack enable
+RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 COPY package.json pnpm-lock.yaml* ./
 RUN pnpm install --frozen-lockfile || pnpm install
 
@@ -10,7 +10,7 @@ RUN pnpm install --frozen-lockfile || pnpm install
 FROM node:22-alpine AS build
 WORKDIR /app
 RUN apk add --no-cache libc6-compat
-RUN corepack enable
+RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NODE_ENV=production
@@ -20,14 +20,14 @@ RUN pnpm build
 FROM node:22-alpine AS runtime
 WORKDIR /app
 RUN apk add --no-cache libc6-compat tini
-RUN corepack enable
+RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOST=0.0.0.0
 
 COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install --prod --frozen-lockfile || pnpm install --prod
+RUN pnpm install --prod --frozen-lockfile --ignore-scripts || pnpm install --prod --ignore-scripts
 
 COPY --from=build /app/build ./build
 COPY --from=build /app/public ./public
