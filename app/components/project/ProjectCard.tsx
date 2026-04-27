@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { motion } from "motion/react";
 import { Link } from "react-router";
+import { Picture } from "~/components/ui/Picture";
 import { COLORS, CATEGORY_CONFIG, type Category } from "~/lib/colors";
 
 export interface ProjectCardData {
@@ -33,17 +34,22 @@ export const ProjectCard = memo(function ProjectCard({ project }: { project: Pro
         aria-label={`Voir le projet ${project.title}`}
         className="block h-full w-full"
       >
-        <motion.img
+        <motion.div
           variants={{ hover: { scale: 1.05 } }}
           transition={{ duration: 0.8 }}
-          src={project.image.src}
-          width={project.image.width}
-          height={project.image.height}
-          alt={`Aperçu du projet ${project.title}`}
-          loading="lazy"
-          className="h-full w-full object-cover object-center"
-          style={{ viewTransitionName: `project-image-${project.slug}` } as React.CSSProperties}
-        />
+          className="h-full w-full"
+        >
+          <Picture
+            src={project.image.src}
+            width={project.image.width}
+            height={project.image.height}
+            alt={`Aperçu du projet ${project.title}`}
+            loading="lazy"
+            className="h-full w-full object-cover object-center"
+            style={{ viewTransitionName: `project-image-${project.slug}` } as React.CSSProperties}
+            pictureClassName="block h-full w-full"
+          />
+        </motion.div>
 
         <div
           className="absolute left-5 top-5 z-[2] whitespace-nowrap rounded-[50px] px-4 py-2 text-[13px] font-medium shadow-[0_4px_12px_rgba(0,0,0,0.15)]"

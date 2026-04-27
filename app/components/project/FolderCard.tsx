@@ -383,17 +383,21 @@ function Lightbox({
       >
         <X size={20} />
       </button>
-      <motion.img
+      <motion.div
         initial={{ scale: 0.88, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.88, opacity: 0 }}
         transition={{ duration: 0.3 }}
-        src={single.src}
-        alt={single.desc}
         onClick={(e) => e.stopPropagation()}
-        className="cursor-default rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
-        style={{ maxWidth: "90vw", maxHeight: "80vh", objectFit: "contain" }}
-      />
+        style={{ maxWidth: "90vw", maxHeight: "80vh" }}
+      >
+        <Picture
+          src={single.src}
+          alt={single.desc}
+          className="block cursor-default rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+          style={{ maxWidth: "100%", maxHeight: "80vh", objectFit: "contain" }}
+        />
+      </motion.div>
       {single.desc && (
         <p
           onClick={(e) => e.stopPropagation()}
