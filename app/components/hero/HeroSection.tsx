@@ -22,7 +22,7 @@ export const HeroSection = memo(function HeroSection() {
             <motion.div
               key={`cherry-row-${rowIndex}`}
               className="absolute left-0 flex w-[300%] gap-[120px]"
-              style={{ top: `${rowIndex * 200}px` }}
+              style={{ top: `${rowIndex * 140}px` }}
               animate={{ x: [0, -2000] }}
               transition={{
                 duration: 40 + rowIndex * 10,
