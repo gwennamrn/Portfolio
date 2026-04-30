@@ -524,6 +524,28 @@ export default function ProjectDetail({ loaderData }: Route.ComponentProps) {
               <FolderMoodboardGrid items={folders.moodboard} />
             )}
           </>
+        ) : p.video ? (
+          <div className="mx-auto max-w-[900px] overflow-hidden rounded-[20px] bg-white shadow-[0_10px_30px_rgba(0,0,0,0.15)]">
+            <div className="relative aspect-video">
+              <iframe
+                src={p.video.url}
+                title={p.video.description}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="absolute inset-0 h-full w-full border-0"
+              />
+            </div>
+            {p.video.description && (
+              <div
+                className="flex items-center gap-2 px-5 py-3"
+                style={{ backgroundColor: COLORS.red }}
+              >
+                <p className="m-0 text-sm leading-[1.5]" style={{ color: COLORS.beige }}>
+                  {p.video.description}
+                </p>
+              </div>
+            )}
+          </div>
         ) : (
           <div
             className="grid gap-[30px]"

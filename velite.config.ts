@@ -112,6 +112,7 @@ export default defineConfig({
           targets: s.array(target),
           gallery: s.array(s.image()).default([]),
           galleryFolders: galleryFolders.optional(),
+          video: videoEmbed.optional(),
           metadata: s.metadata(),
           body: s.mdx(),
         })
