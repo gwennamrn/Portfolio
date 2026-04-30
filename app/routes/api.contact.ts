@@ -37,7 +37,7 @@ export async function action({ request }: Route.ActionArgs) {
       subject: `Nouveau message de ${name} — Portfolio`,
       html: `
         <div style="font-family: 'Inter', sans-serif; color: #0E0E0E; max-width: 600px;">
-          <h1 style="font-family: 'Playfair Display', serif; color: #8E1B2C;">Nouveau message</h1>
+          <h1 style="font-family: 'Bodoni Moda', serif; color: #8E1B2C;">Nouveau message</h1>
           <p><strong>Nom :</strong> ${escapeHtml(name)}</p>
           <p><strong>Email :</strong> ${escapeHtml(email)}</p>
           <p><strong>Message :</strong></p>

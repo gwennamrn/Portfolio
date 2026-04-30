@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "@fontsource-variable/playfair-display";
+@import "@fontsource-variable/bodoni-moda";
 @import "@fontsource-variable/inter";
 
 @theme {
@@ -18,7 +18,7 @@
   --color-cat-perso:      #8B5A8E;
 
   /* Fontes */
-  --font-serif: "Playfair Display Variable", "Playfair Display", Georgia, serif;
+  --font-serif: "Bodoni Moda Variable", "Bodoni Moda", Georgia, serif;
   --font-sans:  "Inter Variable", "Inter", system-ui, sans-serif;
 
   /* Easing signature */
