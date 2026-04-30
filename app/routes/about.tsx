@@ -30,7 +30,7 @@ export default function About() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 1 }}
-            className="mb-5 font-serif font-normal tracking-[-0.01em]"
+            className="mb-5 font-serif font-bold tracking-[-0.01em]"
             style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", color: COLORS.cherry }}
           >
             À propos de moi

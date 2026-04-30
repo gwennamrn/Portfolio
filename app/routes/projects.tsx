@@ -48,7 +48,7 @@ export default function ProjectsList({ loaderData }: Route.ComponentProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
-          className="mb-4 font-serif font-normal text-[var(--color-ink)]"
+          className="mb-4 font-serif font-bold text-[var(--color-ink)]"
           style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}
         >
           Mes Réalisations

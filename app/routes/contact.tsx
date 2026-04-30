@@ -103,7 +103,7 @@ export default function Contact() {
       >
         <h1
           id="contact-heading"
-          className="mb-10 text-center font-serif font-normal"
+          className="mb-10 text-center font-serif font-bold"
           style={{ fontSize: 40, color: COLORS.text }}
         >
           Contact

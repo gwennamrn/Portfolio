@@ -24,7 +24,7 @@ export const ProjectPreview = memo(function ProjectPreview({ projects }: Project
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 1 }}
-        className="mb-20 text-center font-serif font-normal tracking-[-0.01em] text-[var(--color-ink)]"
+        className="mb-20 text-center font-serif font-bold tracking-[-0.01em] text-[var(--color-ink)]"
         style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}
       >
         Avant-goût

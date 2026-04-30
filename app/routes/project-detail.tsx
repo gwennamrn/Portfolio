@@ -75,7 +75,7 @@ export default function ProjectDetail({ loaderData }: Route.ComponentProps) {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1 }}
-          className="mb-[15px] font-serif font-normal leading-[1.1]"
+          className="mb-[15px] font-serif font-bold leading-[1.1]"
           style={{
             fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
             color: COLORS.text,

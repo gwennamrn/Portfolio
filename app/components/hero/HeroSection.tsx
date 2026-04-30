@@ -42,7 +42,7 @@ export const HeroSection = memo(function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
-            className="font-serif font-normal leading-[0.95] tracking-[-0.015em] text-[var(--color-ink)]"
+            className="font-serif font-bold leading-[0.95] tracking-[-0.015em] text-[var(--color-ink)]"
             style={{ fontSize: "clamp(4rem, 12vw, 9rem)", marginBottom: 40 }}
           >
             Gwennaëlle
@@ -92,7 +92,7 @@ export const HeroSection = memo(function HeroSection() {
           transition={{ delay: 0.4, duration: 0.8 }}
         >
           <h2
-            className="mb-5 font-serif font-normal tracking-[-0.01em] text-[var(--color-bg)]"
+            className="mb-5 font-serif font-bold tracking-[-0.01em] text-[var(--color-bg)]"
             style={{ fontSize: "clamp(2rem, 5vw, 3rem)" }}
           >
             Découvrez la stratégie derrière chaque création.
