@@ -1,6 +1,5 @@
 import type { Route } from "./+types/home";
 import { projects } from "#content/index.js";
-import { FallingCherries } from "~/components/cherry/FallingCherries";
 import { HeroSection } from "~/components/hero/HeroSection";
 import { ProjectPreview, type ProjectPreviewItem } from "~/components/project/ProjectPreview";
 
@@ -28,7 +27,6 @@ export function loader() {
 export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <>
-      <FallingCherries />
       <HeroSection />
       <ProjectPreview projects={loaderData.featured} />
     </>
